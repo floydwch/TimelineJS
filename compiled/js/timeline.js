@@ -7334,6 +7334,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 					} else {
 						// trace("YEAR MONTH DAY HOUR MINUTE");
 						_date.startdate.setMinutes(td.getMinutes() + offset);
+					}
 				}
 				
 				_date.uniqueid		= VMM.Util.unique_ID(7);
