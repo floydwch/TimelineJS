@@ -661,7 +661,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				var startpage_date,
 					_date			= {},
 					td_num			= 0,
-					td;
+					td,
+					offset;;
 					
 				if (typeof data.startDate != 'undefined') {
 					startpage_date	= VMM.Date.parse(data.startDate);
@@ -674,25 +675,31 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				if (startpage_date && startpage_date < _dates[0].startdate) {
 					_date.startdate = new Date(startpage_date);
 				} else {
+				if (config.start_at_end) {
+					td = _dates[_dates.length - 1].enddate;
+					_date.startdate = new Date(_dates[_dates.length - 1].enddate);
+					offset = 1;
+				} else {
 					td = _dates[0].startdate;
 					_date.startdate = new Date(_dates[0].startdate);
+					offset = -1;
+				}
 				
-					if (td.getMonth() === 0 && td.getDate() == 1 && td.getHours() === 0 && td.getMinutes() === 0 ) {
-						// trace("YEAR ONLY");
-						_date.startdate.setFullYear(td.getFullYear() - 1);
-					} else if (td.getDate() <= 1 && td.getHours() === 0 && td.getMinutes() === 0) {
-						// trace("YEAR MONTH");
-						_date.startdate.setMonth(td.getMonth() - 1);
-					} else if (td.getHours() === 0 && td.getMinutes() === 0) {
-						// trace("YEAR MONTH DAY");
-						_date.startdate.setDate(td.getDate() - 1);
-					} else  if (td.getMinutes() === 0) {
-						// trace("YEAR MONTH DAY HOUR");
-						_date.startdate.setHours(td.getHours() - 1);
-					} else {
-						// trace("YEAR MONTH DAY HOUR MINUTE");
-						_date.startdate.setMinutes(td.getMinutes() - 1);
-					}
+				if (td.getMonth() === 0 && td.getDate() == 1 && td.getHours() === 0 && td.getMinutes() === 0 ) {
+					// trace("YEAR ONLY");
+					_date.startdate.setFullYear(td.getFullYear() + offset);
+				} else if (td.getDate() <= 1 && td.getHours() === 0 && td.getMinutes() === 0) {
+					// trace("YEAR MONTH");
+					_date.startdate.setMonth(td.getMonth() + offset);
+				} else if (td.getHours() === 0 && td.getMinutes() === 0) {
+					// trace("YEAR MONTH DAY");
+					_date.startdate.setDate(td.getDate() + offset);
+				} else  if (td.getMinutes() === 0) {
+					// trace("YEAR MONTH DAY HOUR");
+					_date.startdate.setHours(td.getHours() + offset);
+				} else {
+					// trace("YEAR MONTH DAY HOUR MINUTE");
+					_date.startdate.setMinutes(td.getMinutes() + offset);
 				}
 				
 				_date.uniqueid		= VMM.Util.unique_ID(7);
